@@ -1,34 +1,28 @@
 // SearchForm.jsx
 
 const SearchForm = ({
-  location,
-  setLocation,
+  setRequestParams,
   animal,
   setAnimal,
-  breed,
-  setBreed,
   breeds,
   ANIMALS,
-  requestPets,
 }) => {
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        requestPets();
+        const formData = new FormData(e.target);
+        const obj = {
+          animal: formData.get("animal") ?? "",
+          location: formData.get("location") ?? "",
+          breed: formData.get("breed") ?? "",
+        };
+        setRequestParams(obj);
       }}
     >
       <label htmlFor="location">
         Location
-        <input
-          id="location"
-          name="location"
-          onChange={(e) => {
-            setLocation(e.target.value);
-          }}
-          value={location}
-          placeholder="Location"
-        />
+        <input id="location" name="location" placeholder="Location" />
       </label>
       <label htmlFor="animal">
         Animal
@@ -37,11 +31,6 @@ const SearchForm = ({
           name="animal"
           onChange={(e) => {
             setAnimal(e.target.value);
-            setBreed("");
-          }}
-          onBlur={(e) => {
-            setAnimal(e.target.value);
-            setBreed("");
           }}
           value={animal}
         >
@@ -55,14 +44,7 @@ const SearchForm = ({
       </label>
       <label htmlFor="breed">
         Breed
-        <select
-          id="breed"
-          name="breed"
-          disabled={breeds.length === 0}
-          onChange={(e) => setBreed(e.target.value)}
-          onBlur={(e) => setBreed(e.target.value)}
-          value={breed}
-        >
+        <select id="breed" name="breed" disabled={breeds.length === 0}>
           <option />
           {breeds.map((breed) => (
             <option key={breed} value={breed}>

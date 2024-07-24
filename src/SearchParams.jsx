@@ -1,45 +1,34 @@
 // SearchParams.js
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Results from "./Results";
 import { useBreedList, useAnimals } from "./useAnimalAndBreedList";
 import SearchForm from "./SearchForm";
+import fetchSearch from "./fetchSearch";
 
 const SearchParams = () => {
-  const [location, setLocation] = useState("");
   const [animal, setAnimal] = useState("");
-  const [breed, setBreed] = useState("");
-  const [pets, setPets] = useState([]);
+  //const [pets, setPets] = useState([]);
+  const [requestParams, setRequestParams] = useState({
+    location: "",
+    animal: "",
+    breed: "",
+  });
   const [breeds] = useBreedList(animal);
-  const ANIMALS = useAnimals();
+  const ANIMALS = useAnimals()[0];
 
-  useEffect(() => {
-    requestPets();
-  }, []);
-
-  async function requestPets() {
-    const res = await fetch(
-      `https://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
-    );
-    const json = await res.json();
-    setPets(json.pets);
-  }
-
+  const results = useQuery(["search", requestParams], fetchSearch);
+  const pets = results?.data?.pets ?? [];
   return (
     <div className="search-params">
       <SearchForm
-        location={location}
-        setLocation={setLocation}
+        setRequestParams={setRequestParams}
         animal={animal}
         setAnimal={setAnimal}
-        breed={breed}
-        setBreed={setBreed}
         breeds={breeds}
         ANIMALS={ANIMALS}
-        requestPets={requestPets}
       />
-      <div className="results">
-        <Results pets={pets} />
-      </div>
+      <Results pets={pets} />
     </div>
   );
 };
