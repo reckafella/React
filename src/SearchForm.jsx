@@ -4,6 +4,7 @@ const SearchForm = ({
   setRequestParams,
   animal,
   setAnimal,
+  adoptedPet,
   breeds,
   ANIMALS,
 }) => {
@@ -20,6 +21,11 @@ const SearchForm = ({
         setRequestParams(obj);
       }}
     >
+      {adoptedPet ? (
+        <div className="pet image-container">
+          <img src={adoptedPet.images[0]} alt={adoptedPet.name} />
+        </div>
+      ) : null}
       <label htmlFor="location">
         Location
         <input id="location" name="location" placeholder="Location" />

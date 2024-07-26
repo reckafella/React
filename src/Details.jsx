@@ -5,7 +5,7 @@ import AdoptedPetContext from "./AdoptedPetContext";
 import Modal from "./Modal";
 import fetchPet from "./FetchPet";
 import Carousel from "./Carousel";
-import ErrorBoundary from './errorBoundaries';
+import ErrorBoundary from "./errorBoundaries";
 
 const Details = () => {
   const [showModal, setShowModal] = useState(false);
@@ -40,20 +40,25 @@ const Details = () => {
             <div>
               <h1>Would you like to Adopt {pet.name}?</h1>
               <div className="buttons">
-                <button onClick={()=> {
-                  setAdoptedPets(pet);
-                  navigate('/');
-                }}>Yes</button>
+                <button
+                  onClick={() => {
+                    setAdoptedPets(pet);
+                    navigate("/");
+                  }}
+                >
+                  Yes
+                </button>
                 <button onClick={() => setShowModal(false)}>No</button>
               </div>
             </div>
-          </Modal>) : null}
+          </Modal>
+        ) : null}
       </div>
     </div>
   );
 };
 
-function DetailsErrorBoundary (props) {
+function DetailsErrorBoundary(props) {
   return (
     <ErrorBoundary>
       <Details {...props} />
